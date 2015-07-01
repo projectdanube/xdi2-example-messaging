@@ -1,5 +1,7 @@
 package xdi2.example.messaging;
 
+import xdi2.client.XDIClient;
+import xdi2.client.impl.local.XDILocalClient;
 import xdi2.core.Graph;
 import xdi2.core.impl.memory.MemoryGraphFactory;
 import xdi2.core.io.XDIReader;
@@ -10,7 +12,7 @@ import xdi2.core.syntax.XDIAddress;
 import xdi2.messaging.Message;
 import xdi2.messaging.MessageCollection;
 import xdi2.messaging.MessageEnvelope;
-import xdi2.messaging.MessageResult;
+import xdi2.messaging.response.MessagingResponse;
 import xdi2.messaging.target.impl.graph.GraphMessagingTarget;
 
 public class SimpleMessagingSample {
@@ -36,11 +38,11 @@ public class SimpleMessagingSample {
 
         // execute the message
 
-        MessageResult messageResult = new MessageResult();
-        graphMessagingTarget.execute(messageEnvelope, messageResult, null);
+        XDIClient xdiClient = new XDILocalClient(graphMessagingTarget);
+        MessagingResponse messagingResponse = xdiClient.send(messageEnvelope);
 
         // serialize the result
 
-        writer.write(messageResult.getGraph(), System.out);
+        writer.write(messagingResponse.getGraph(), System.out);
     }
 }
