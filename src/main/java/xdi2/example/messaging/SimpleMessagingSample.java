@@ -12,8 +12,8 @@ import xdi2.core.syntax.XDIAddress;
 import xdi2.messaging.Message;
 import xdi2.messaging.MessageCollection;
 import xdi2.messaging.MessageEnvelope;
+import xdi2.messaging.container.impl.graph.GraphMessagingContainer;
 import xdi2.messaging.response.MessagingResponse;
-import xdi2.messaging.target.impl.graph.GraphMessagingTarget;
 
 public class SimpleMessagingSample {
 
@@ -22,12 +22,12 @@ public class SimpleMessagingSample {
         XDIReader reader = XDIReaderRegistry.forFormat("XDI DISPLAY", null);
         XDIWriter writer = XDIWriterRegistry.forFormat("XDI/JSON", null);
 
-        // load an XDI graph and create a messaging target
+        // load an XDI graph and create a messaging container
 
         Graph graph = MemoryGraphFactory.getInstance().openGraph();
         reader.read(graph, SimpleMessagingSample.class.getResourceAsStream("simple.xdi"));
-        GraphMessagingTarget graphMessagingTarget = new GraphMessagingTarget();
-        graphMessagingTarget.setGraph(graph);
+        GraphMessagingContainer graphContainer = new GraphMessagingContainer();
+        graphContainer.setGraph(graph);
 
         // create a message
 
@@ -38,7 +38,7 @@ public class SimpleMessagingSample {
 
         // execute the message
 
-        XDIClient xdiClient = new XDILocalClient(graphMessagingTarget);
+        XDIClient xdiClient = new XDILocalClient(graphContainer);
         MessagingResponse messagingResponse = xdiClient.send(messageEnvelope);
 
         // serialize the result
